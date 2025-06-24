@@ -42,10 +42,10 @@ export function topK(req: Request, res: Response) {
 	});
 
 	const result: video[] = [];
-	while (!heap.isEmpty() && result.length < k) {
+	while (!heap.isEmpty()) {
 		const item = heap.pop();
 		if (item) result.push(item);
 	}
 
-	return res.json(result.reverse());
+	return res.json(result.reverse().slice(0, k));
 }
