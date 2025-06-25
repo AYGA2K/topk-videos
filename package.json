@@ -15,7 +15,8 @@
 	"license": "ISC",
 	"type": "commonjs",
 	"dependencies": {
-		"express": "^5.1.0"
+		"express": "^5.1.0",
+		"kafkajs": "^2.2.4"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.4",

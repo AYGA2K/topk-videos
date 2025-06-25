@@ -1,11 +1,11 @@
 export type video = {
 	id: string;
 	name: string;
-	count: number;
+	views: number;
 };
 export class MinHeap {
 	private readonly data: video[] = [];
-	private readonly idToIndex = new Map<string, number>(); // Index per video ID
+	private readonly idToIndex = new Map<string, number>();
 
 	public has(id: string): boolean {
 		return this.idToIndex.has(id);
@@ -48,7 +48,24 @@ export class MinHeap {
 		const index = this.idToIndex.get(id);
 		if (index === undefined) return;
 
-		this.data[index].count += newCount;
+		this.data[index].views += newCount;
+	}
+	public getTopK(k: number): video[] {
+		const clone = new MinHeap();
+		for (const item of this.data) {
+			clone.push({ ...item });
+		}
+
+		const result: video[] = [];
+		let i = 0;
+		while (!clone.isEmpty()) {
+			const vid = clone.pop();
+			if (vid) {
+				result.push(vid);
+				i++;
+			}
+		}
+		return result.reverse().slice(0, k);
 	}
 
 	private bubbleUp(index: number): void {
@@ -97,6 +114,6 @@ export class MinHeap {
 	}
 
 	private compare(a: video, b: video): number {
-		return a.count - b.count;
+		return a.views - b.views;
 	}
 }
