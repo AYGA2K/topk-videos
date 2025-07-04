@@ -75,12 +75,10 @@ export class MinHeap {
 		}
 
 		const result: video[] = [];
-		let i = 0;
 		while (!clone.isEmpty()) {
 			const vid = clone.pop();
 			if (vid) {
 				result.push(vid);
-				i++;
 			}
 		}
 		return result.reverse().slice(0, k);
