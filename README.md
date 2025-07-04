@@ -75,8 +75,6 @@ A REST endpoint `/top/:k?window=day|week|month` is exposed via Express. It retur
 
 1. **Start Kafka and Zookeeper with Docker Compose**
 
-Make sure you have Kafka and Zookeeper running locally via Docker Compose. Run this command in the directory containing your `docker-compose.yml` file:
-
 ```bash
 docker compose up -d
 ```
