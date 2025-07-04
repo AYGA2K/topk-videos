@@ -1,6 +1,6 @@
 # 📺 Top-K Videos API
 
-A high-performance API built with **Express.js** and **TypeScript** that tracks video view counts and returns the top-K most viewed videos within a given time window (`day`, `week`, or `month`).  
+An API built with **Express.js** and **TypeScript** that tracks video view counts and returns the top-K most viewed videos within a given time window (`day`, `week`, or `month`).  
 It uses a **Min Heap** for efficient retrieval and integrates **Kafka** to simulate real-time video view events.
 
 ---
