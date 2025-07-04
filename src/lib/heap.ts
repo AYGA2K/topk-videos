@@ -2,7 +2,13 @@ export type video = {
 	id: string;
 	name: string;
 	views: number;
+	timeStamp: Date;
 };
+export enum Window {
+	Day,
+	Week,
+	Month,
+}
 export class MinHeap {
 	private readonly data: video[] = [];
 	private readonly idToIndex = new Map<string, number>();
@@ -22,7 +28,10 @@ export class MinHeap {
 		const top = this.data[0];
 		this.idToIndex.delete(top.id);
 
-		const last = this.data.pop()!;
+		const last = this.data.pop();
+		if (last === undefined) {
+			return undefined;
+		}
 		if (this.data.length > 0) {
 			this.data[0] = last;
 			this.idToIndex.set(last.id, 0);
@@ -50,10 +59,19 @@ export class MinHeap {
 
 		this.data[index].views += newCount;
 	}
-	public getTopK(k: number): video[] {
+	public getTopK(k: number, window: Window): video[] {
 		const clone = new MinHeap();
 		for (const item of this.data) {
-			clone.push({ ...item });
+			switch (window) {
+				case Window.Day:
+					if (this.isToday(item.timeStamp)) clone.push({ ...item });
+					break;
+				case Window.Week:
+					if (this.isThisWeek(item.timeStamp)) clone.push({ ...item });
+					break;
+				case Window.Month:
+					if (this.isThisMonth(item.timeStamp)) clone.push({ ...item });
+			}
 		}
 
 		const result: video[] = [];
@@ -115,5 +133,35 @@ export class MinHeap {
 
 	private compare(a: video, b: video): number {
 		return a.views - b.views;
+	}
+	private isToday(date: Date): boolean {
+		date = new Date(date);
+		const today = new Date();
+		return (
+			date.getDate() === today.getDate() &&
+			date.getMonth() === today.getMonth() &&
+			date.getFullYear() === today.getFullYear()
+		);
+	}
+
+	private isThisWeek(date: Date): boolean {
+		date = new Date(date);
+		const today = new Date();
+		const startOfWeek = new Date(today);
+		startOfWeek.setDate(today.getDate() - today.getDay()); // Sunday
+
+		const endOfWeek = new Date(today);
+		endOfWeek.setDate(today.getDate() + (6 - today.getDay())); // Saturday
+
+		return date >= startOfWeek && date <= endOfWeek;
+	}
+
+	private isThisMonth(date: Date): boolean {
+		date = new Date(date);
+		const today = new Date();
+		return (
+			date.getMonth() === today.getMonth() &&
+			date.getFullYear() === today.getFullYear()
+		);
 	}
 }

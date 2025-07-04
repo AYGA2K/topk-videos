@@ -1,6 +1,6 @@
 import { Kafka } from "kafkajs";
 import { heap } from "../main";
-import { video } from "../lib/heap";
+import type { video } from "../lib/heap";
 
 const kafka = new Kafka({
 	clientId: "video-consumer",
