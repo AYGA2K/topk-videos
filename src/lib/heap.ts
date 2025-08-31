@@ -60,28 +60,39 @@ export class MinHeap {
 		this.data[index].views += newCount;
 	}
 	public getTopK(k: number, window: Window): video[] {
-		const clone = new MinHeap();
+		const topK = new MinHeap();
+
 		for (const item of this.data) {
+			let valid = false;
 			switch (window) {
 				case Window.Day:
-					if (this.isToday(item.timeStamp)) clone.push({ ...item });
+					valid = this.isToday(item.timeStamp);
 					break;
 				case Window.Week:
-					if (this.isThisWeek(item.timeStamp)) clone.push({ ...item });
+					valid = this.isThisWeek(item.timeStamp);
 					break;
 				case Window.Month:
-					if (this.isThisMonth(item.timeStamp)) clone.push({ ...item });
+					valid = this.isThisMonth(item.timeStamp);
+					break;
+			}
+
+			if (!valid) continue;
+
+			if (topK.size() < k) {
+				topK.push({ ...item });
+			} else if (item.views > (topK.peek()?.views ?? 0)) {
+				topK.pop();
+				topK.push({ ...item });
 			}
 		}
 
+		// Extract in descending order
 		const result: video[] = [];
-		while (!clone.isEmpty()) {
-			const vid = clone.pop();
-			if (vid) {
-				result.push(vid);
-			}
+		while (!topK.isEmpty()) {
+			const vid = topK.pop();
+			if (vid) result.push(vid);
 		}
-		return result.reverse().slice(0, k);
+		return result.reverse(); // most viewed first
 	}
 
 	private bubbleUp(index: number): void {
